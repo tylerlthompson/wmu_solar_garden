@@ -3,4 +3,9 @@ Senior Design project for Computer Engineering degree at Western Michigan Univer
 
 
 <img src="images/image1.png">
-<img src="images/IMG_20191114_151534.jpg">
+<img src="images/IMG_20191114_151534.jpg" style="transform:rotate(90deg);">
+<img src="images/image000004.jpg">
+<img src="images/image11.png">
+<img src="images/DataCollectionServerSoftwareUML.png">
+<img src="images/LEDSignageProgramUML.png">
+
