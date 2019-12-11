@@ -1,0 +1,29 @@
+<html>
+	<head>
+		<link rel= 'stylesheet' type= 'text/css' href= '/static/styles.css'/>
+		<link rel="shortcut icon" type="image/x-icon" href="/static/favicon.png" />
+		<title>
+			LED Sign
+		</title>
+	</head>
+	<body>
+		<table>
+			<tr>
+				<td>
+					<div class='title'>
+						<img border='0' alt='arrow' src='/static/favicon.png' width='100' height='100'>
+					</div>
+				</td>
+				<td>
+					<div class='title'>
+						Sign Controller
+					</div>
+				</td>
+			</tr>
+		</table>
+		{% if session['logged_in'] == True %}
+			{% include 'menu.html' %}
+		{% endif %}
+		
+	</body>
+</html>

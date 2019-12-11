@@ -1,0 +1,131 @@
+<html>
+	{% include 'header.html' %}
+    <p></p>
+    <div class='summary_table_wrapper' >
+        <table class='summary_table'>
+                <tr>
+                    <th class="summary_table_header">
+                        Order
+                    </th>
+                    <th class='summary_table_header'>
+                        Type
+                    </th>
+                    <th class='summary_table_header'>
+                        Description
+                    </th>
+
+                    <th class='summary_table_header'>
+                        Duration
+                    </th>
+                    <th class='summary_table_header'>
+                        Enabled
+                    </th>
+                </tr>
+                {% for frame in config['frames'] | sort(attribute='order') %}
+                    <tr>
+                        <td class='summary_table_data'>
+                            {{ frame['order'] }}
+                        </td>
+                        <td class='summary_table_data'>
+                            {{ frame['type'] }}
+                        </td>
+                        <td class='summary_table_data'>
+                            {{ frame['description'] }}
+                        </td>
+                        <td class='summary_table_data'>
+                            {{ frame['duration'] }} Seconds
+                        </td>
+                        <td class='summary_table_data'>
+                            {{ frame['enabled'] }}
+                        </td>
+                        <td class="summary_table_data" style="border-bottom: none;">
+                            <form action='/edit_frame' method='post'>
+                                <div class='submit_button' style="padding-top: 0; width: 40px; height: 20px;">
+                                    <input class='button' type="submit" value="Edit" name="edit">
+                                    <input type="hidden" name="index" value="{{ frame['index'] }}">
+                                </div>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+        </table>
+    </div>
+    {% if session['edit_frame'] %}
+        <div class='summary_table_wrapper' >
+            <form action='/edit_frame' method='post' enctype=multipart/form-data>
+                <input type="hidden" name="index" value="{{ session['edit_frame']['index'] }}">
+                <table class='summary_table' >
+                    {% for setting in session['edit_frame'] %}
+                        {% if setting != 'index' %}
+                            <tr>
+                                <th class='settings_table_header'>
+                                    {{ setting | normalize }}
+                                </th>
+                                <td class='summary_table_data'>
+                                    {% if setting != 'type' %}
+                                        {% if config['frame_templates'][session['edit_frame']['type']][setting] == 'text' %}
+                                            <input type="text" value="{{ session['edit_frame'][setting] }}" name="{{ setting }}">
+                                        {% elif config['frame_templates'][session['edit_frame']['type']][setting] == 'int' %}
+                                            <input type="text" value="{{ session['edit_frame'][setting] }}" name="{{ setting }}">
+                                        {% elif config['frame_templates'][session['edit_frame']['type']][setting] == 'bool' %}
+                                            {% if session['edit_frame'][setting] ==  True %}
+                                                <input type="checkbox" class='checkbox' name="{{ setting }}" checked>
+                                            {% else %}
+                                                <input type="checkbox" class='checkbox' name="{{ setting }}">
+                                            {% endif %}
+                                            <input type="hidden" value="off" name="{{ setting }}">
+                                        {% elif config['frame_templates'][session['edit_frame']['type']][setting] == 'color' %}
+                                            <input type="color" name="{{ setting }}" value="{{ session['edit_frame'][setting] }}">
+                                        {% elif config['frame_templates'][session['edit_frame']['type']][setting] == 'textarea' %}
+                                            <textarea rows="2" cols="20" name="{{ setting }}">{{ session['edit_frame'][setting] | normalize }}</textarea>
+                                        {% elif config['frame_templates'][session['edit_frame']['type']][setting] == 'data' %}
+                                            <select name="{{ setting }}">
+                                                {% for data in config['data_stores']['data'][session['edit_frame']['location']] %}
+                                                    {% if data != 'collection_datetime' %}
+                                                        {% if data == session['edit_frame'][setting] %}
+                                                                <option value='{{ data }}' selected>{{ data | normalize }}</option>
+                                                        {% else %}}
+                                                                <option value='{{ data }}' >{{ data | normalize }}</option>
+                                                        {% endif %}
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </select>
+                                        {% elif config['frame_templates'][session['edit_frame']['type']][setting] == 'font' %}
+                                            <select name="{{ setting }}">
+                                                {% for font in config['displays']['led_matrix']['fonts'] %}
+                                                    {% if font == session['edit_frame'][setting] %}
+                                                            <option value='{{ font }}' selected>{{ font }}</option>
+                                                    {% else %}}
+                                                            <option value='{{ font }}' >{{ font }}</option>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </select>
+                                        {% elif config['frame_templates'][session['edit_frame']['type']][setting] == 'file' %}
+                                            <input type="hidden" name="image" value="{{ session['edit_frame']['image'] }}">
+                                            <img height="50px" src="/uploads/{{ session['edit_frame']['image'] }}">
+                                        {% elif config['frame_templates'][session['edit_frame']['type']][setting] == 'location' %}
+                                            <input type="hidden" name="location" value="{{ session['edit_frame']['location'] }}">
+                                            {{ session['edit_frame'][setting] | normalize }}
+                                        {% else %}
+                                            {{ session['edit_frame'][setting] | normalize }}
+                                        {% endif %}
+                                    {% else %}
+                                        {{ session['edit_frame'][setting] | normalize }}
+                                        <input type="hidden" name="type" value="{{ session['edit_frame']['type'] }}">
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                    <tr>
+                        <td>
+                            <div class='submit_button'>
+                                <input class='button' type="submit" value="Save" name="save">
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    {% endif %}
+</html>

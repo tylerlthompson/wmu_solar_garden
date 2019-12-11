@@ -1,0 +1,97 @@
+<div class='menu_wrapper' >
+<table class='menu_table' {% if session['logged_in'] == True and session['username'] is defined %}"  {% endif %} >
+	<tr>
+	</tr>
+	<tr>
+		<td class='menu_title'>
+			Menu
+		</td>
+	</tr>
+	
+	<tr>
+		<td>
+			<a 
+			{% if current_menu.active %}
+				class="menu_active"
+			{% else %}
+				class="menu"
+			{% endif %}
+				href="{{ current_menu.url}}">{{ current_menu.text }}</a>
+		</td>
+	</tr>
+	
+	{%- for item in current_menu.children %}
+		<tr>
+			<td>
+			
+			<a 
+			{% if item.active %}
+				class="menu_child_active"
+			{% else %}
+				class="menu_child"
+			{% endif %}
+				href="{{ item.url}}"><img border='0' alt='arrow' src='/static/90degreearrow.png' width='10' height='10'> {{ item.text }}</a>
+			</td>
+		</tr>
+
+			{% for child in item.children %}
+				{% if item.active %}
+						<tr>
+							<td>
+								<a 
+								{% if child.active %}
+									class="menu_sub_child_active"
+								{% else %}
+									class="menu_sub_child"
+								{% endif %}
+									href="{{ child.url}}"><img border='0' alt='arrow' src='/static/90degreearrow.png' width='10' height='10'> {{ child.text }}</a>
+							
+							</td>
+						</tr>
+				{% elif child.active %}
+					
+					{% for child in item.children %}
+						<tr>
+							<td>
+								<a 
+								{% if child.active %}
+									class="menu_sub_child_active"
+								{% else %}
+									class="menu_sub_child"
+								{% endif %}
+									href="{{ child.url}}"><img border='0' alt='arrow' src='/static/90degreearrow.png' width='10' height='10'> {{ child.text }}</a>
+							</td>
+						</tr>
+					{% endfor %}
+				{% endif %}
+			{% endfor %}
+	{% endfor %}
+</table>
+
+</div>
+
+
+{%- for item in current_menu.children %}
+
+		{%- for child in item.children %}
+			{% if child.active %}
+				<div class='page_title'>
+					{{ child.text }}
+				</div>
+				<p/>
+			{% endif %}
+		{% endfor %}
+
+	{% if item.active %}
+		<div class='page_title'>
+			{{ item.text }}
+		</div>
+		<p/>
+	{% endif %}
+{% endfor %}
+{% if current_menu.active %}
+	<div class='page_title'>
+			{{ current_menu.text }}
+	</div>
+	<p/>
+{% endif %}

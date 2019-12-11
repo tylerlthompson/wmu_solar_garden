@@ -1,0 +1,63 @@
+#!/bin/bash
+
+### BEGIN INIT INFO
+# Provides:          Solar Garden LED Signage
+# Required-Start:    $local_fs $network $named $time $syslog
+# Required-Stop:     $local_fs $network $named $time $syslog
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Solar Garden LED Signage
+# Description:       Solar Garden LED Signage
+### END INIT INFO
+
+DISP_EXEC="/opt/Solar_Garden_LED_Signage/LEDController.py"
+WEB_EXEC="/opt/Solar_Garden_LED_Signage/WebInterface.py"
+DISP_PID=/var/run/sgls_disp.pid
+WEB_PID=/var/run/sgls_web.pid
+RUNAS=root
+
+start() {
+        echo "Starting Display Constroller..."
+        local CMD="start-stop-daemon --start --quiet --make-pidfile --background --pidfile $DISP_PID --exec $DISP_EXEC"
+        su $RUNAS -c "$CMD"
+        echo "Starting Web Interface..."
+        local CMD="start-stop-daemon --start --quiet --make-pidfile --background --pidfile $WEB_PID --exec $WEB_EXEC"
+        su $RUNAS -c "$CMD"
+	# disable RTC after time sync and boot
+	rmmod rtc_ds1307
+        echo "Done."
+
+}
+
+stop() {
+        echo "Stopping Display Constroller..."
+        start-stop-daemon --stop --quiet --pidfile $DISP_PID
+        echo "Stopping Web Interface..."
+        start-stop-daemon --stop --quiet --pidfile $WEB_PID
+}
+
+status() {
+        echo "Status of Display Constroller"
+        ps "$(cat $DISP_PID)"
+        echo "Status of Web Interface"
+        ps "$(cat $WEB_PID)"
+}
+
+case "$1" in
+  start)
+    start
+    ;;
+  stop)
+    stop
+    ;;
+  restart)
+    stop
+    start
+    ;;
+  status)
+    status
+    ;;
+  *)
+    echo "Usage: $0 {start|stop|restart|status}"
+esac
+

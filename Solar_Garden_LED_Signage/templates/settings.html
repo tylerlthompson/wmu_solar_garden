@@ -1,0 +1,86 @@
+<html>
+    {% include 'header.html' %}
+    <form action="/settings" method="post">
+        <div class="summary_table_wrapper">
+            <table class="summary_table">
+                <tr>
+                    <th class="settings_table_header">
+                        Location
+                    </th>
+                    <td class="settings_table_data">
+                        <select name="data_location">
+                            {% for location_name in config['data_stores']['locations']['list'] %}
+                                {% if location_name == config['data_stores']['location']['name'] %}
+										<option value='{{ location_name }}' selected>{{ location_name }}</option>
+                                {% else %}}
+                                        <option value='{{ location_name }}' >{{ location_name }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <th class="settings_table_header">
+                        Default LED Brightness
+                    </th>
+                    <td class="settings_table_data">
+                        <input class="input_place_holder_wide" type="text" name="brightness" value="{{ config['displays']['led_matrix']['brightness'] }}"/>
+                    </td>
+                </tr>
+                <tr>
+                    <th class="settings_table_header">
+                        Auto Brightness
+                    </th>
+                    <td class="settings_table_data">
+                        {% if config['displays']['led_matrix']['auto_brightness'] ==  True %}
+                            <input type="checkbox" class='checkbox' name="auto_brightness" checked>
+                        {% else %}
+                            <input type="checkbox" class='checkbox' name="auto_brightness">
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <th class="settings_table_header">
+                        Local Admin Username
+                    </th>
+                    <td class="settings_table_data">
+                        <input class="input_place_holder_wide" type="text" name="username" value="{{ config['interfaces']['web']['username'] }}"/>
+                    </td>
+                </tr>
+                <tr>
+                    <th class="settings_table_header">
+                        Local Admin Password
+                    </th>
+                    <td class="settings_table_data">
+                        <input class="input_place_holder_wide" type="password" style="-webkit-text-security: square;" name="password" placeholder="*********"/>
+                    </td>
+                </tr>
+
+                <tr>
+                    <th class="settings_table_header">
+                        Server Listen Port
+                    </th>
+                    <td class="settings_table_data">
+                        <input class="input_place_holder_wide" type="text" name="port" value="{{ config['interfaces']['web']['port'] }}"/>
+                    </td>
+                </tr>
+                <tr>
+                    <th class="settings_table_header">
+                        Enable Web Debug
+                    </th>
+                    <td class="settings_table_data">
+                        <input class='checkbox' type="checkbox" name='debug' {% if config['interfaces']['web']['debug'] == True %} checked {% endif %}/>
+                        <input type="hidden" name="debug" value="off">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class='submit_button'>
+                            <input class='button' type="submit" value="Save" name="save_settings">
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </form>
+</html>

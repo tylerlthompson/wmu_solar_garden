@@ -1,0 +1,81 @@
+<html>
+{% include 'header.html' %}
+
+    <div class="summary_table_wrapper">
+        <table class="summary_table">
+            <tr>
+                <th class="settings_table_header">
+                    Author
+                </th>
+                <td class="settings_table_data">
+                    {{ git.author }}
+                </td>
+            </tr>
+            <tr>
+                <th class="settings_table_header">
+                    Author Contact
+                </th>
+                <td class="settings_table_data">
+                    {{ git.authorContact }}
+                </td>
+            </tr>
+            <!--<tr>-->
+                <!--<th class="settingstableheader">-->
+                    <!--Program Description-->
+                <!--</th>-->
+                <!--<td class="summarytabledata">-->
+                    <!--{{ git.description }}-->
+                <!--</td>-->
+            <!--</tr>-->
+            <tr>
+                <th class="settings_table_header">
+                    Git Branch
+                </th>
+                <td class="settings_table_data">
+                    {{ git.branch }}
+                </td>
+            </tr>
+            <tr>
+                <th class="settings_table_header">
+                    Git Remote
+                </th>
+                <td class="settings_table_data">
+                    {{ git.remote }}
+                </td>
+            </tr>
+            <tr>
+                <th class="settings_table_header">
+                    Git Commit Version
+                </th>
+                <td class="settings_table_data">
+                    {{ git.commit }}
+                </td>
+            </tr>
+            <tr>
+                <th class="settings_table_header">
+                    Git Commit Date
+                </th>
+                <td class="settings_table_data">
+                    {{ git.lastCommittedDate }}
+                </td>
+            </tr>
+            <tr>
+                <th class="settings_table_header">
+                    Working Directory
+                </th>
+                <td class="settings_table_data">
+                    {{ git.repoRoot }}
+                </td>
+            </tr>
+            <tr>
+                <th class="settings_table_header">
+                    Log Directory
+                </th>
+                <td class="settings_table_data">
+                    {{ config.log_dir }}
+                </td>
+            </tr>
+        </table>
+    </div>
+
+</html>

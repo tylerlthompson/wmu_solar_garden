@@ -1,0 +1,54 @@
+<html>
+	{% include 'header.html' %}
+
+<p></p>
+
+	<div class='summary_table_wrapper' >
+    <table class='summary_table'>
+            <tr>
+                <th class="summary_table_header">
+                    Order
+                </th>
+                <th class='summary_table_header'>
+                    Type
+                </th>
+                <th class='summary_table_header'>
+                    Description
+                </th>
+                <th class='summary_table_header'>
+                    Duration
+                </th>
+                <th class='summary_table_header'>
+                    Enabled
+                </th>
+            </tr>
+            {% for frame in config['frames'] | sort(attribute='order') %}
+                <tr>
+                    <td class='summary_table_data'>
+                        {{ frame['order'] }}
+                    </td>
+                    <td class='summary_table_data'>
+                        {{ frame['type'] }}
+                    </td>
+                    <td class='summary_table_data'>
+                        {{ frame['description'] }}
+                    </td>
+                    <td class='summary_table_data'>
+                        {{ frame['duration'] }} Seconds
+                    </td>
+                    <td class='summary_table_data'>
+                        {{ frame['enabled'] }}
+                    </td>
+					<td class="summary_table_data" style="border-bottom: none;">
+						<form action='/delete_frame' method='post'>
+							<div class='submit_button' style="padding-top: 0; width: 60px; height: 20px;">
+								<input class='button' type="submit" value="Delete" name="delete">
+								<input type="hidden" name="index" value="{{ frame['index'] }}">
+							</div>
+						</form>
+					</td>
+                </tr>
+            {% endfor %}
+    </table>
+</div>
+</html>

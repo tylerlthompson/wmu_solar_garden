@@ -1,0 +1,95 @@
+<html>
+	{% include 'header.html' %}
+<p></p>
+	<body>
+		<div class='summary_table_wrapper' >
+			<form action='/add_frame' method='post'>
+				<table class='summary_table' >
+					<tr>
+						<th class='settings_table_header'>
+							Type
+						</th>
+						<td class='summary_table_data'>
+								<select name='type' >
+									{% for frame_type in config['frame_templates'] %}
+										<option value='{{ frame_type }}' >{{ frame_type | normalize }}</option>
+									{% endfor %}
+								</select>
+						</td>
+						<td>
+							<div class='submit_button_large' style="padding-top: 0;" >
+								<input class='button' type="submit" value="Load Template" name="load_template">
+							</div>
+						</td>
+					</tr>
+				</table>
+			</form>
+		</div>
+		{% if frame_template %}
+			<div class='page_subtitle' >
+				New {{ session['frame_type'] | normalize }} Frame
+			</div>
+			<p></p>
+			<div class='summary_table_wrapper' >
+				<form action='/add_frame' method='post' enctype=multipart/form-data>
+					<table class='summary_table' >
+						{% for setting in frame_template %}
+							{% if setting != 'index' %}
+								<tr>
+									<th class='settings_table_header'>
+										{{ setting | normalize }}
+									</th>
+									<td class='settings_table_data'>
+										{% if setting == 'type' %}
+											{{ session['frame_type'] }}
+											<input type="hidden" name="{{ setting }}" value="{{ session['frame_type'] }}">
+                                        {% elif setting == 'location' %}
+                                            {{ config['data_stores']['location']['name'] }}
+                                            <input type="hidden" name="{{ setting }}" value="{{ config['data_stores']['location']['name'] }}">
+										{% elif frame_template[setting] == 'text' or frame_template[setting] == 'int' %}
+											<input type="text" name="{{ setting }}">
+										{% elif frame_template[setting] == 'bool' %}
+											<input type="checkbox" class="checkbox" name="{{ setting }}" checked>
+											<input type="hidden" name="{{ setting }}" value="off">
+										{% elif frame_template[setting] == 'color' %}
+                                            {% if setting == "background_color" %}
+                                                <input type="color" name="{{ setting }}" value="#000000">
+                                            {% else %}
+											    <input type="color" name="{{ setting }}" value="{{ range(0, 255) | random | random_color }}">
+                                            {% endif %}
+										{% elif frame_template[setting] == 'file' %}
+											<input type="file" name="{{ setting }}">
+										{% elif frame_template[setting] == 'textarea' %}
+											<textarea rows="2" cols="20" name="{{ setting }}"></textarea>
+										{% elif frame_template[setting] == 'data' %}
+											<select name="{{ setting }}">
+												{% for data_option in config['data_stores']['data'][config['data_stores']['location']['name']] %}
+                                                    {% if data_option != 'collection_datetime' %}
+													    <option value='{{ data_option }}' >{{ data_option | normalize }}</option>
+                                                    {% endif %}
+												{% endfor %}
+											</select>
+										{% elif frame_template[setting] == 'font' %}
+											<select name="{{ setting }}">
+												{% for font in config['displays']['led_matrix']['fonts'] %}
+													<option value='{{ font }}' >{{ font }}</option>
+												{% endfor %}
+											</select>
+										{% endif %}
+									</td>
+								</tr>
+							{% endif %}
+						{% endfor %}
+						<tr>
+							<td>
+								<div class='submit_button'>
+									<input class='button' type="submit" value="Add" name="add_frame">
+								</div>
+							</td>
+						</tr>
+					</table>
+				</form>
+			</div>
+		{% endif %}
+	</body>
+</html>

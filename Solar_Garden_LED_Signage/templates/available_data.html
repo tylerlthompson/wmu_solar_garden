@@ -1,0 +1,53 @@
+<html>
+	{% include 'header.html' %}
+<div class='page_subtitle' >
+	<table>
+		<tr>
+			<td class='page_subtitle'style="font-style: normal; font-size: 14px;">
+			Database Connection Status:
+			</td>
+			{% if connection_status == True %}
+				<td style="background-color: #06a800; display: inline-block;">
+					Connected
+				</td>
+			<!--	<img border='0' alt='green' src='/static/green.png' width="10px" height="10px">-->
+			{% else %}
+				<td style="background-color: #cb0000;">
+					Failed to connect, see log for details
+				</td>
+			<!--	<img border='0' alt='red' src='/static/red.png' width="10px" height="10px">-->
+			{% endif %}
+		</tr>
+		<tr>
+			<td class='page_subtitle' style="font-style: normal; font-size: 14px;">
+				Last Data Sync:
+			</td>
+			<td>
+				 {{ config['data_stores']['data_sync_time'] }}
+			</td>
+		</tr>
+	</table>
+</div>
+<p></p>
+
+{% for location in config['data_stores']['locations']['list'] %}
+    <div class='page_subtitle'>
+		{{ location | normalize }}
+	</div>
+	<p></p>
+	<div class='summary_table_wrapper' >
+		<table class='summary_table'>
+			{% for data_header in config['data_stores']['data'][location] %}
+				<tr>
+					<th class='settings_table_header'>
+						{{ data_header | normalize }}
+					</th>
+					<td class="summary_table_data">
+						{{ config['data_stores']['data'][location][data_header] }}
+					</td>
+				</tr>
+			{% endfor %}
+		</table>
+	</div>
+{% endfor %}
+</html>

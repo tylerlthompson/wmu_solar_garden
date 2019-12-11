@@ -1,0 +1,5 @@
+# update the server with current wifi ip if it has changed
+* * * * * /opt/Solar_Garden_LED_Signage/bin/update_redirect.sh >/dev/null 2>&1
+
+# switch the usb wifi dongle into wifi mode at boot
+@reboot /usr/sbin/usb_modeswitch -KW -v 0bda -p 1a2b >/dev/null 2>&1

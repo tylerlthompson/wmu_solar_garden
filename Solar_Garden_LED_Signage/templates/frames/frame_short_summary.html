@@ -1,0 +1,49 @@
+<div class='page_subtitle' >
+			Frame Summary
+</div>
+<p></p>
+<div class='summary_table_wrapper' >
+    <table class='summary_table'>
+            <tr>
+                <th class="summary_table_header">
+                    Order
+                </th>
+                <th class='summary_table_header'>
+                    Type
+                </th>
+                <th class='summary_table_header'>
+                    Description
+                </th>
+
+                <th class='summary_table_header'>
+                    Duration
+                </th>
+                <th class='summary_table_header'>
+                    Enabled
+                </th>
+            </tr>
+            {% for frame in config['frames'] | sort(attribute='order') %}
+                <tr>
+                    <td class='summary_table_data'>
+                        {{ frame['order'] }}
+                    </td>
+                    <td class='summary_table_data'>
+                        {{ frame['type'] }}
+                    </td>
+                    <td class='summary_table_data'>
+                        {{ frame['description'] }}
+                    </td>
+                    <td class='summary_table_data'>
+                        {{ frame['duration'] }} Seconds
+                    </td>
+                    <td class='summary_table_data'>
+                        {% if frame['enabled'] == True %}
+                            <div class="box_full"></div>
+                        {% else %}
+                            <div class="box_empty"></div>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+    </table>
+</div>

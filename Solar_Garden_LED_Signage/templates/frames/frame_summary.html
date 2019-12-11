@@ -1,0 +1,57 @@
+{% for frame_type in config['frame_templates'] %}
+	<div class='page_subtitle'>
+		{{ frame_type | normalize }}
+	</div>
+	<p></p>
+
+	<div class='summary_table_wrapper' >
+		<table class='summary_table'>
+			<tr>
+				{% for header in config['frame_templates'][frame_type] %}
+					{% if header not in config['interfaces']['web']['hidden_keys'] or header == "location" %}
+						<th class="summary_table_header">
+							{{ header | normalize }}
+						</th>
+					{% endif %}
+				{% endfor %}
+			</tr>
+			{% for frame in config['frames'] | sort(attribute='order') %}
+				{% if frame['type'] == frame_type %}
+					<tr>
+						{% for frame_data in frame %}
+							{% if frame_data not in config['interfaces']['web']['hidden_keys'] or frame_data == "location" %}
+                                {% if config['frame_templates'][frame['type']][frame_data] == 'color' %}
+                                    <td class="summary_table_data">
+                                        <div style="color: {{ frame[frame_data] }}; padding: 3px 3px 3px 3px; text-align: center; text-shadow: -0.5px -0.5px 0 #D5CFCE, 0.5px -0.5px 0 #D5CFCE, -0.5px 0.5px 0 #D5CFCE, 0.5px 0.5px 0 #D5CFCE;">
+									        {{ frame[frame_data] | all_upper }}
+                                        </div>
+    								</td>
+                                {% elif frame_data == 'duration' %}
+                                    <td class="summary_table_data">
+									    {{ frame[frame_data] | normalize }} Seconds
+    								</td>
+                                {% elif frame_data == 'enabled' %}
+                                    <td class="summary_table_data">
+                                        {% if frame[frame_data] == True %}
+									        <div class="box_full"></div>
+                                        {% else %}
+                                            <div class="box_empty"></div>
+                                        {% endif %}
+    								</td>
+                                {% elif frame_data == 'image' %}
+                                    <td class="summary_table_data">
+									    <img height="20px" src="/uploads/{{ frame[frame_data] }}">
+    								</td>
+                                {% else %}
+								    <td class="summary_table_data">
+									    {{ frame[frame_data] | normalize }}
+    								</td>
+                                {% endif %}
+							{% endif %}
+						{% endfor %}
+					</tr>
+				{% endif %}
+			{% endfor %}
+		</table>
+	</div>
+{% endfor %}
